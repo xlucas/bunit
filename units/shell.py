@@ -1,10 +1,9 @@
 import argparse
-import mmap
 import operator
 import sys
 
 from prettytable import PrettyTable
-from units import binary, si, tools, errors
+from units import system, tools, errors
 
 
 def build_parser():
@@ -19,14 +18,14 @@ def build_parser():
     group.add_argument('--system', metavar='name')
 
     # Other options
-    parser.add_argument('--precision', metavar='value', type=int, default=1)
+    parser.add_argument('--precision', metavar='value', type=int, default=2)
 
     return parser
 
 
-def print_unit_system(value, unit_in, system, precision):
+def print_unit_system(value, unit_in, s, precision):
     table = PrettyTable(['Unit', 'Value'])
-    for unit_out in system:
+    for unit_out in s:
         converted_value = tools.convert(value, unit_in, unit_out)
         converted_value_string = '%.*f' % (precision, converted_value)
         table.add_row([unit_out.name, converted_value_string])
@@ -36,13 +35,13 @@ def print_unit_system(value, unit_in, system, precision):
 def list_all_units(systems):
     return reduce(
         lambda x, y: x + y,
-        [map(operator.attrgetter('name'), list(system)) for system in systems]
+        [map(operator.attrgetter('name'), list(s)) for s in systems]
     )
 
 
 def print_unit_error(unit_name, systems):
     units = ', '.join(list_all_units(systems))
-    sys.stderr.write("Unrecognized unit '%s'\n" % unit_name)
+    sys.stderr.write("Unrecognized unit '%s'.\n" % unit_name)
     sys.stderr.write("Possible values are: %s" % units)
 
 
@@ -56,34 +55,47 @@ def main():
         sys.stderr.write("Invalid input stream.")
         return errors.ERR_VAL
 
-    systems = [si.Bits, si.Bytes, binary.BiBytes]
+    systems = {
+        'bits': system.Bits,
+        'bytes': system.Bytes,
+        'bibytes': system.BiBytes
+    }
 
     unit_name_in = getattr(parsed_args, 'in')
     unit_name_out = getattr(parsed_args, 'out')
+    system_name = getattr(parsed_args, 'system')
 
-    system_in = tools.find_system(unit_name_in, systems)
-    system_out = tools.find_system(unit_name_out, systems)
+    system_in = tools.find_system(unit_name_in, systems.values())
+    system_out = tools.find_system(unit_name_out, systems.values())
 
     if not system_in:
-        print_unit_error(unit_name_in, systems)
+        print_unit_error(unit_name_in, systems.values())
         return errors.ERR_OPT
 
     if not system_out and unit_name_out:
-        print_unit_error(unit_name_out, systems)
+        print_unit_error(unit_name_out, systems.values())
         return errors.ERR_OPT
 
+    if system_name and not system_out:
+        if system_name not in systems:
+            names = ', '.join(systems.keys())
+            sys.stderr.write("Unrecognized system name '%s'.\n" % system_name)
+            sys.stderr.write("Possible values are: %s" % names)
+            return errors.ERR_OPT
+        else:
+            system_out = systems[system_name]
+
+    unit_in = system_in[unit_name_in]
+
     if not system_out:
-        print_unit_system(
-            value, system_in[unit_name_in], system_in, parsed_args.precision
-        )
+        print_unit_system(value, unit_in, system_in, parsed_args.precision)
         return
 
     if unit_name_out:
-        pass
-        # TODO: convert & print the value
+        unit_out = system_out[unit_name_out]
+        print(tools.convert(value, unit_in, unit_out))
     else:
-        pass
-        # TODO: convert & print the system
+        print_unit_system(value, unit_in, system_out, parsed_args.precision)
 
 
 if __name__ == '__main__':
