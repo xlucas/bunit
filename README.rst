@@ -4,6 +4,14 @@ Bunit
 A dead simple binary unit conversion tool.
 
 
+Installation
+------------
+
+.. code-block::
+
+    pip install bunit
+
+
 Usage
 -----
 
