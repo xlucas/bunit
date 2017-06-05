@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name='units',
+    name='bunit',
     version='0.1',
-    description='Units conversion tool',
+    description='Binary unit conversion tool',
     classifiers=[
         'Intended Audience :: System Administrators',
         'Development Status :: 3 - Alpha',
@@ -13,11 +13,11 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
     ],
-    url='https://github.com/xlucas/units',
+    url='https://github.com/xlucas/bunit',
     author="Xavier Lucas",
     author_email="xavier_lucas@ymail.com",
     license='MIT',
-    packages=['units'],
-    entry_points={'console_scripts': ['units=units.shell:main']},
+    packages=['unit'],
+    entry_points={'console_scripts': ['bunit=unit.shell:main']},
     zip_safe=False,
 )

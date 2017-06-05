@@ -1,7 +1,7 @@
-Units
+Bunit
 =====
 
-A dead simple unit conversion tool.
+A dead simple binary unit conversion tool.
 
 
 Usage
@@ -15,12 +15,12 @@ Converting between two units
 
 .. code-block::
 
-    echo "1024" | units --in=kiB --out=MiB
+    echo "1024" | bunit --in=kiB --out=MiB
     1.0
 
 .. code-block::
 
-    echo "128" | units --in=b --out=B
+    echo "128" | bunit --in=b --out=B
     16
 
 Converting between units of the same system
@@ -28,7 +28,7 @@ Converting between units of the same system
 
 .. code-block::
 
-    echo "32" | units --in=GiB
+    echo "32" | bunit --in=GiB
     +------+-------------+
     | Unit |    Value    |
     +------+-------------+
@@ -47,7 +47,7 @@ Converting between units of different systems
 
 .. code-block::
 
-    echo "1" | units --in=GiB --system=bytes
+    echo "1" | bunit --in=GiB --system=bytes
     +------+---------------+
     | Unit |     Value     |
     +------+---------------+

@@ -3,7 +3,7 @@ import operator
 import sys
 
 from prettytable import PrettyTable
-from units import system, tools, errors
+from unit import system, tools, errors
 
 
 def build_parser():
