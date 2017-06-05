@@ -3,10 +3,11 @@ from setuptools import setup
 setup(
     name='units',
     version='0.1',
-    description='Units printer',
+    description='Units conversion tool',
     classifiers=[
+        'Intended Audience :: System Administrators',
         'Development Status :: 3 - Alpha',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
