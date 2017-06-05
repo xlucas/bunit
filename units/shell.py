@@ -43,14 +43,18 @@ def list_all_units(systems):
 def print_unit_error(unit_name, systems):
     units = ', '.join(list_all_units(systems))
     sys.stderr.write("Unrecognized unit '%s'\n" % unit_name)
-    sys.stderr.write("Possible values are : %s" % units)
+    sys.stderr.write("Possible values are: %s" % units)
 
 
 def main():
     parser = build_parser()
     parsed_args = parser.parse_args()
 
-    input_ = sys.stdin.read()
+    try:
+        value = float(sys.stdin.read())
+    except ValueError:
+        sys.stderr.write("Invalid input stream.")
+        return errors.ERR_VAL
 
     systems = [si.Bits, si.Bytes, binary.BiBytes]
 
@@ -62,11 +66,24 @@ def main():
 
     if not system_in:
         print_unit_error(unit_name_in, systems)
-        return errors.ERR_UNIT
+        return errors.ERR_OPT
 
     if not system_out and unit_name_out:
         print_unit_error(unit_name_out, systems)
-        return errors.ERR_UNIT
+        return errors.ERR_OPT
+
+    if not system_out:
+        print_unit_system(
+            value, system_in[unit_name_in], system_in, parsed_args.precision
+        )
+        return
+
+    if unit_name_out:
+        pass
+        # TODO: convert & print the value
+    else:
+        pass
+        # TODO: convert & print the system
 
 
 if __name__ == '__main__':

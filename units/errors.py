@@ -1,1 +1,2 @@
-ERR_UNIT = 0x02
+ERR_OPT = 0x01
+ERR_VAL = 0x02
