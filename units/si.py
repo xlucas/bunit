@@ -12,9 +12,6 @@ class Bits(Enum):
     Zb = 10**21
     Yb = 10**24
 
-    def to(system, unit):
-        pass
-
 
 class Bytes(Enum):
     B = 10**0
@@ -26,6 +23,3 @@ class Bytes(Enum):
     EB = 10**18
     ZB = 10**21
     YB = 10**24
-
-    def to(system, unit):
-        pass

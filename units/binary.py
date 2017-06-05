@@ -10,6 +10,3 @@ class BiBytes(Enum):
     EiB = 1 << 60
     ZiB = 1 << 70
     YiB = 1 << 80
-
-    def to(system, unit):
-        pass
